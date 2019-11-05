@@ -1,0 +1,2 @@
+ALTER TABLE task
+ADD isDoneStatus BOOLEAN DEFAULT false;

@@ -3,6 +3,14 @@
     <mat-icon mat-list-icon>assignment</mat-icon>
     <h4 mat-line>{{task.name}}</h4>
     <p mat-line>ID: {{task.id}}</p>
+    <div class="icon-container" *ngIf="task.isDoneStatus; else elseBlock">
+      <mat-icon class="successNew">check_circle</mat-icon>
+    </div>
+    <ng-template #elseBlock>
+      <button mat-icon-button color="primary"(click)="setDone(task)">
+        <mat-icon>check_circle</mat-icon>
+      </button>
+    </ng-template>
     <button mat-icon-button color="primary">
       <mat-icon aria-label="Delete task" (click)="delete(task)">delete</mat-icon>
     </button>

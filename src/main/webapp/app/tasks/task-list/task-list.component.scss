@@ -11,3 +11,15 @@
 p {
   color: rgba(0, 0, 0, 0.54);
 }
+
+.successNew {
+  color: greenyellow;
+}
+.icon-container {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}

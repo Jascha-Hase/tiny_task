@@ -16,7 +16,7 @@ export class LocalTaskService implements TaskService {
 
   create(name: string): Observable<Task> {
     const tasks = this.readTasks();
-    const task = {id: uuid(), name};
+    const task = {id: uuid(), name, isDoneStatus: false};
     tasks.push(task);
     this.writeTasks(tasks);
     return of(task);
@@ -38,6 +38,18 @@ export class LocalTaskService implements TaskService {
   }
 
   private writeTasks(tasks: Task[]): void {
+ 
     localStorage.setItem(LocalTaskService.STORAGE_KEY, JSON.stringify(tasks));
   }
+  update(task: Task): Observable<void> {
+    const tasks = this.readTasks();
+    const index = tasks.findIndex(taskItem => taskItem.id === task.id);
+    if (index !== -1) {
+      tasks.splice(index, 1, task);
+      this.writeTasks(tasks);
+      this.getAll();
+    }
+    return of(null);
+  }
+ 
 }
