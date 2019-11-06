@@ -14,6 +14,7 @@ export interface TaskService {
    */
   getAll(): Observable<Task[]>;
 
+  deleteAllDoneTasks(): Observable<void>;
   /**
    * Adds a new task to the list of tasks.
    *
@@ -36,5 +37,6 @@ export interface TaskService {
    * @param id the ID of the task to be updated
    * @returns an empty observable
    */
-  update(task: Task): Observable<void>;
+  markTaskDone(task: Task): Observable<void>;
+  
 }

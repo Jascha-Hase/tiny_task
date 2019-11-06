@@ -32,6 +32,6 @@ public class Task {
   @CreatedDate
   private Instant created;
 
-  @Column(name="isdonestatus")
-  private Boolean isDoneStatus;
+  @Column(name="done")
+  private Boolean done;
 }

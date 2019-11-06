@@ -27,16 +27,15 @@ export class TaskListComponent {
       this.deleted.emit(task);
     });
   }
-  update(task: Task): void {
-    this.taskService.update(task).subscribe(() => {
+  markTaskDone(task: Task): void {
+    this.taskService.markTaskDone(task).subscribe(() => {
       this.updated.emit(task);
     });
   }
 
   setDone(task: Task): void {
-    task.isDoneStatus = true;
-    this.update(task);
-
+    task.done = true;
+    this.markTaskDone(task);
   }
 
 

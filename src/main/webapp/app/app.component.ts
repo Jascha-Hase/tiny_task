@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
     this.tasks$ = this.taskService.getAll();
   }
 
-  updated(): void {
+  markTaskDone(): void {
     this.tasks$ = this.taskService.getAll();
   }
 }

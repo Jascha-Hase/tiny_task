@@ -14,5 +14,5 @@ public class TaskResponse {
   private String id;
 
   private String name;
-  private Boolean isDoneStatus;
+  private Boolean done;
 }

@@ -16,7 +16,7 @@ export class LocalTaskService implements TaskService {
 
   create(name: string, dueDate: Date): Observable<Task> {
     const tasks = this.readTasks();
-    const task = {id: uuid(), name, isDoneStatus: false, dueDate};
+    const task = {id: uuid(), name, done: false, dueDate};
     tasks.push(task);
     this.writeTasks(tasks);
     return of(task);
@@ -31,17 +31,24 @@ export class LocalTaskService implements TaskService {
     }
     return of(null);
   }
-
+  deleteAllDoneTasks(): Observable<void>{
+    const tasks = this.readTasks();
+    const doneTasks = tasks.filter(function(task){
+      return task.done == false;
+    })
+    localStorage.setItem(LocalTaskService.STORAGE_KEY, JSON.stringify(doneTasks));
+    return of(null);
+  }
   private readTasks(): Task[] {
     const tasks = localStorage.getItem(LocalTaskService.STORAGE_KEY);
     return tasks ? JSON.parse(tasks) : [];
   }
 
   private writeTasks(tasks: Task[]): void {
- 
+    tasks.sort(this.sortTasks);
     localStorage.setItem(LocalTaskService.STORAGE_KEY, JSON.stringify(tasks));
   }
-  update(task: Task): Observable<void> {
+  markTaskDone(task: Task): Observable<void> {
     const tasks = this.readTasks();
     const index = tasks.findIndex(taskItem => taskItem.id === task.id);
     if (index !== -1) {
@@ -51,5 +58,8 @@ export class LocalTaskService implements TaskService {
     }
     return of(null);
   }
- 
+  private sortTasks(a, b) {
+    return (a.done === b.done) ? 0 : a.done ? 1 : -1;
+  }
+  
 }

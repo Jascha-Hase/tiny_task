@@ -1,2 +1,2 @@
 ALTER TABLE task
-ADD isDoneStatus BOOLEAN DEFAULT false;
+ADD done BOOLEAN DEFAULT false;

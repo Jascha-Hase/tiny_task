@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Task } from '../task';
 import { TaskService } from '../task.service';
+import { LocalTaskService } from '../local-task.service';
 
 /**
  * A form to create tiny tasks.
@@ -17,6 +18,7 @@ export class TaskFormComponent {
 
   startDate = new Date();
   @Output() created: EventEmitter<Task> = new EventEmitter();
+  @Output() deleted: EventEmitter<Task> = new EventEmitter();
 
   taskForm: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -25,10 +27,15 @@ export class TaskFormComponent {
 
   constructor(@Inject('TaskService') private taskService: TaskService) { }
 
-  onSubmit(): void {
+  addTaskButton(): void {
     this.taskService.create(this.taskForm.value.name, this.taskForm.value.dueDate).subscribe(task => {
       this.created.emit(task);
       this.taskForm.reset();
+    });
+  }
+  deleteDone(){
+    this.taskService.deleteAllDoneTasks().subscribe(() => {
+      this.deleted.emit();
     });
   }
 }
