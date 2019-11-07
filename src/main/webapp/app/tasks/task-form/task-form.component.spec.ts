@@ -14,7 +14,7 @@ describe('TaskFormComponent', () => {
       declarations: [TaskFormComponent],
       providers: [{
         provide: 'TaskService',
-        useValue: jasmine.createSpyObj('taskService', ['create'])
+        useValue: jasmine.createSpyObj('taskService', ['create', 'deleteAllDoneTasks'])
       }]
     }).overrideTemplate(TaskFormComponent, '')
       .compileComponents();
@@ -77,5 +77,26 @@ describe('TaskFormComponent', () => {
 
     // then
     expect(formReset).toHaveBeenCalled();
+  });
+  it('should delete a task', () => {
+    // given
+    taskService.deleteAllDoneTasks.and.returnValue(of(undefined));
+
+    // when
+    component.deleteDone();
+
+    // then
+    expect(taskService.deleteAllDoneTasks).toHaveBeenCalled();
+  });
+  it('should emit the deleted tasks', () => {
+    // given
+    taskService.deleteAllDoneTasks.and.returnValue(of(undefined));
+    const createEmitter = spyOn(component.deleted, 'emit');
+    
+    // when
+    component.deleteDone();
+
+    // then
+    expect(createEmitter).toHaveBeenCalled();
   });
 });
