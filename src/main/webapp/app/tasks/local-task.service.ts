@@ -27,12 +27,14 @@ export class LocalTaskService implements TaskService {
     this.writeTasks(tasks.filter(task => task.id !== id));
     return of(null);
   }
+  
   deleteAllDoneTasks(): Observable<void>{
     const tasks = this.readTasks();
     const doneTasks = tasks.filter((task) => !task.done)
     this.writeTasks(doneTasks);
     return of(null);
   }
+
   private readTasks(): Task[] {
     const tasks = localStorage.getItem(LocalTaskService.STORAGE_KEY);
     return tasks ? JSON.parse(tasks) : [];
