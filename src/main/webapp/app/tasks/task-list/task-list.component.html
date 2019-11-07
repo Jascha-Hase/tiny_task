@@ -1,5 +1,5 @@
 <mat-list data-cy="task-list">
-  <input [(ngModel)]="searchText" placeholder="Search.." class="advancedSearchTextbox">
+  <input [(ngModel)]="searchText" placeholder="Search.." class="search">
   <mat-list-item *ngFor="let task of tasks | taskfilter: {name: searchText}" class="mat-elevation-z1">
     <mat-icon mat-list-icon>assignment</mat-icon>
     <h4 mat-line>{{task.name}}</h4>
