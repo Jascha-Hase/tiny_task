@@ -24,21 +24,17 @@ export class LocalTaskService implements TaskService {
 
   delete(id: string): Observable<void> {
     const tasks = this.readTasks();
-    const index = tasks.findIndex(task => task.id === id);
-    if (index !== -1) {
-      tasks.splice(index, 1);
-      this.writeTasks(tasks);
-    }
+    this.writeTasks(tasks.filter(task => task.id !== id));
     return of(null);
   }
+  
   deleteAllDoneTasks(): Observable<void>{
     const tasks = this.readTasks();
-    const doneTasks = tasks.filter(function(task){
-      return task.done == false;
-    })
-    localStorage.setItem(LocalTaskService.STORAGE_KEY, JSON.stringify(doneTasks));
+    const doneTasks = tasks.filter((task) => !task.done)
+    this.writeTasks(doneTasks);
     return of(null);
   }
+
   private readTasks(): Task[] {
     const tasks = localStorage.getItem(LocalTaskService.STORAGE_KEY);
     return tasks ? JSON.parse(tasks) : [];
@@ -48,22 +44,18 @@ export class LocalTaskService implements TaskService {
     tasks.sort(this.sortTasks);
     localStorage.setItem(LocalTaskService.STORAGE_KEY, JSON.stringify(tasks));
   }
-  markTaskDone(task: Task): Observable<void> {
-    const tasks = this.readTasks();
-    const index = tasks.findIndex(taskItem => taskItem.id === task.id);
-    if (index !== -1) {
-      tasks.splice(index, 1, task);
-      this.writeTasks(tasks);
-      this.getAll();
-    }
-    return of(null);
-  }
+
   private sortTasks(a, b) {
     return (a.done === b.done) ? 0 : a.done ? 1 : -1;
   }
-  setDone(task: Task): Observable<void> {
-    task.done = true;
-    this.markTaskDone(task);
+
+  setDone(id: String): Observable<void> {
+    const tasks = this.readTasks();
+    const task = tasks.find(taskItem => taskItem.id === id);
+    if (task !== undefined) {
+      task.done = true;
+      this.writeTasks(tasks);
+    }
     return of(null);
   }
   
