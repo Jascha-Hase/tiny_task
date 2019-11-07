@@ -46,13 +46,14 @@ describe('TaskListComponent', () => {
 
   it('should emit the task after deletion', () => {
     // given
+    const date = new Date();
     taskService.delete.and.returnValue(of(null));
     const deleteEmitter = spyOn(component.deleted, 'emit');
 
     // when
-    component.delete({ id: 'id', name: 'My task', dueDate: new Date, done: false });
+    component.delete({ id: 'id', name: 'My task', dueDate: date, done: false });
 
     // then
-    expect(deleteEmitter).toHaveBeenCalledWith({ id: 'id', name: 'My task' });
+    expect(deleteEmitter).toHaveBeenCalledWith({ id: 'id', name: 'My task', dueDate: date, done: false });
   });
 });

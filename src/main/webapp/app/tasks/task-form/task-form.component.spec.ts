@@ -34,39 +34,42 @@ describe('TaskFormComponent', () => {
 
   it('should validate a task', () => {
     expect(component.taskForm.invalid).toBe(true);
-    component.taskForm.setValue({ name: 'My task' });
+    component.taskForm.setValue({ name: 'My task', dueDate: new Date() });
     expect(component.taskForm.invalid).toBe(false);
   });
 
   it('should create a task', () => {
     // given
-    component.taskForm.setValue({ name: 'My task' });
-    taskService.create.and.returnValue(of({ id: 'id', name: 'My task', dueDate: new Date, done: false }));
+    const date = new Date();
+    component.taskForm.setValue({ name: 'My task', dueDate: date });
+    taskService.create.and.returnValue(of({ id: 'id', name: 'My task', dueDate: date, done: false }));
 
     // when
     component.addTaskButton();
 
     // then
-    expect(taskService.create).toHaveBeenCalledWith('My task');
+    expect(taskService.create).toHaveBeenCalledWith('My task', date);
   });
 
   it('should emit the task after creation', () => {
     // given
-    component.taskForm.setValue({ name: 'My task' });
-    taskService.create.and.returnValue(of({ id: 'id', name: 'My task', dueDate: new Date, done: false }));
+    const date = new Date();
+    component.taskForm.setValue({ name: 'My task', dueDate: date });
+    taskService.create.and.returnValue(of({ id: 'id', name: 'My task', dueDate: date, done: false }));
     const createEmitter = spyOn(component.created, 'emit');
-
+    
     // when
     component.addTaskButton();
 
     // then
-    expect(createEmitter).toHaveBeenCalledWith({ id: 'id', name: 'My task' });
+    expect(createEmitter).toHaveBeenCalledWith({ id: 'id', name: 'My task', dueDate: date, done: false });
   });
 
   it('should reset the form after creation', () => {
     // given
-    component.taskForm.setValue({ name: 'My task' });
-    taskService.create.and.returnValue(of({ id: 'id', name: 'My task', dueDate: new Date, done: false }));
+    const date = new Date();
+    component.taskForm.setValue({ name: 'My task', dueDate: date });
+    taskService.create.and.returnValue(of({ id: 'id', name: 'My task', dueDate: date, done: false }));
     const formReset = spyOn(component.taskForm, 'reset');
 
     // when

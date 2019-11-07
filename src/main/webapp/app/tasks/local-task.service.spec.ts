@@ -3,7 +3,7 @@ import { LocalTaskService } from 'app/tasks/local-task.service';
 import { Observable } from 'rxjs';
 import { Task } from './task';
 
-fdescribe('LocalTaskService', () => {
+describe('LocalTaskService', () => {
   const id = 'de4f576e-d1b5-488a-8c77-63d4c8726909';
   const name = 'Doing the do!';
   const mockTask = `{"id":"${id}","name":"${name}"}`;
