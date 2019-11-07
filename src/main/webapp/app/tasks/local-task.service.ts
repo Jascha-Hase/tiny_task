@@ -61,5 +61,10 @@ export class LocalTaskService implements TaskService {
   private sortTasks(a, b) {
     return (a.done === b.done) ? 0 : a.done ? 1 : -1;
   }
+  setDone(task: Task): Observable<void> {
+    task.done = true;
+    this.markTaskDone(task);
+    return of(null);
+  }
   
 }

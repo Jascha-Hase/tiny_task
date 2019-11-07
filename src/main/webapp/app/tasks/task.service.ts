@@ -15,6 +15,7 @@ export interface TaskService {
   getAll(): Observable<Task[]>;
 
   deleteAllDoneTasks(): Observable<void>;
+  setDone(task: Task): Observable<void>;
   /**
    * Adds a new task to the list of tasks.
    *

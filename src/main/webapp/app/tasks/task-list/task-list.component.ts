@@ -1,8 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
-
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, Output} from '@angular/core';
 import { Task } from '../task';
 import { TaskService } from '../task.service';
-
 /**
  * A list of tiny tasks.
  */
@@ -13,7 +11,7 @@ import { TaskService } from '../task.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskListComponent {
-
+  public searchText : string;
   @Input() tasks: Task[];
   @Output() deleted: EventEmitter<Task> = new EventEmitter();
   @Output() updated: EventEmitter<Task> = new EventEmitter();
@@ -34,9 +32,8 @@ export class TaskListComponent {
   }
 
   setDone(task: Task): void {
-    task.done = true;
-    this.markTaskDone(task);
+    this.taskService.setDone(task).subscribe(() => {
+      this.updated.emit(task);
+    })
   }
-
-
 }
