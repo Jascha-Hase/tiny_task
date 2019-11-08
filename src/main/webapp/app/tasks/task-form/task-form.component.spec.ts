@@ -14,7 +14,7 @@ describe('TaskFormComponent', () => {
       declarations: [TaskFormComponent],
       providers: [{
         provide: 'TaskService',
-        useValue: jasmine.createSpyObj('taskService', ['create'])
+        useValue: jasmine.createSpyObj('taskService', ['create', 'deleteAllDoneTasks'])
       }]
     }).overrideTemplate(TaskFormComponent, '')
       .compileComponents();
@@ -34,45 +34,69 @@ describe('TaskFormComponent', () => {
 
   it('should validate a task', () => {
     expect(component.taskForm.invalid).toBe(true);
-    component.taskForm.setValue({name: 'My task'});
+    component.taskForm.setValue({ name: 'My task', dueDate: new Date() });
     expect(component.taskForm.invalid).toBe(false);
   });
 
   it('should create a task', () => {
     // given
-    component.taskForm.setValue({name: 'My task'});
-    taskService.create.and.returnValue(of({id: 'id', name: 'My task'}));
+    const date = new Date();
+    component.taskForm.setValue({ name: 'My task', dueDate: date });
+    taskService.create.and.returnValue(of({ id: 'id', name: 'My task', dueDate: date, done: false }));
 
     // when
-    component.onSubmit();
+    component.addTaskButton();
 
     // then
-    expect(taskService.create).toHaveBeenCalledWith('My task');
+    expect(taskService.create).toHaveBeenCalledWith('My task', date);
   });
 
   it('should emit the task after creation', () => {
     // given
-    component.taskForm.setValue({name: 'My task'});
-    taskService.create.and.returnValue(of({id: 'id', name: 'My task'}));
+    const date = new Date();
+    component.taskForm.setValue({ name: 'My task', dueDate: date });
+    taskService.create.and.returnValue(of({ id: 'id', name: 'My task', dueDate: date, done: false }));
     const createEmitter = spyOn(component.created, 'emit');
-
+    
     // when
-    component.onSubmit();
+    component.addTaskButton();
 
     // then
-    expect(createEmitter).toHaveBeenCalledWith({id: 'id', name: 'My task'});
+    expect(createEmitter).toHaveBeenCalledWith({ id: 'id', name: 'My task', dueDate: date, done: false });
   });
 
   it('should reset the form after creation', () => {
     // given
-    component.taskForm.setValue({name: 'My task'});
-    taskService.create.and.returnValue(of({id: 'id', name: 'My task'}));
+    const date = new Date();
+    component.taskForm.setValue({ name: 'My task', dueDate: date });
+    taskService.create.and.returnValue(of({ id: 'id', name: 'My task', dueDate: date, done: false }));
     const formReset = spyOn(component.taskForm, 'reset');
 
     // when
-    component.onSubmit();
+    component.addTaskButton();
 
     // then
     expect(formReset).toHaveBeenCalled();
+  });
+  it('should delete a task', () => {
+    // given
+    taskService.deleteAllDoneTasks.and.returnValue(of(undefined));
+
+    // when
+    component.deleteDone();
+
+    // then
+    expect(taskService.deleteAllDoneTasks).toHaveBeenCalled();
+  });
+  it('should emit the deleted tasks', () => {
+    // given
+    taskService.deleteAllDoneTasks.and.returnValue(of(undefined));
+    const deleteEmitter = spyOn(component.deleted, 'emit');
+    
+    // when
+    component.deleteDone();
+
+    // then
+    expect(deleteEmitter).toHaveBeenCalled();
   });
 });

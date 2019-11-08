@@ -3,6 +3,7 @@ import { of } from 'rxjs';
 
 import { TaskService } from '../task.service';
 import { TaskListComponent } from './task-list.component';
+import { BOOL_TYPE } from '@angular/compiler/src/output/output_ast';
 
 describe('TaskListComponent', () => {
   let component: TaskListComponent;
@@ -14,7 +15,7 @@ describe('TaskListComponent', () => {
       declarations: [TaskListComponent],
       providers: [{
         provide: 'TaskService',
-        useValue: jasmine.createSpyObj('taskService', ['delete'])
+        useValue: jasmine.createSpyObj('taskService', ['delete', 'setDone'])
       }]
     }).overrideTemplate(TaskListComponent, '')
       .compileComponents();
@@ -37,7 +38,7 @@ describe('TaskListComponent', () => {
     taskService.delete.and.returnValue(of(null));
 
     // when
-    component.delete({id: 'id', name: 'My task'});
+    component.delete({ id: 'id', name: 'My task', dueDate: new Date, done: false });
 
     // then
     expect(taskService.delete).toHaveBeenCalledWith('id');
@@ -45,13 +46,38 @@ describe('TaskListComponent', () => {
 
   it('should emit the task after deletion', () => {
     // given
+    const date = new Date();
     taskService.delete.and.returnValue(of(null));
     const deleteEmitter = spyOn(component.deleted, 'emit');
 
     // when
-    component.delete({id: 'id', name: 'My task'});
+    component.delete({ id: 'id', name: 'My task', dueDate: date, done: false });
 
     // then
-    expect(deleteEmitter).toHaveBeenCalledWith({id: 'id', name: 'My task'});
+    expect(deleteEmitter).toHaveBeenCalledWith({ id: 'id', name: 'My task', dueDate: date, done: false });
+  });
+
+  it('should setdone task', () => {
+    // given
+    taskService.setDone.and.returnValue(of(null));
+
+    // when
+    component.setDone({ id: 'id', name: 'My task', dueDate: new Date, done: false });
+
+    // then
+    expect(taskService.setDone).toHaveBeenCalledWith('id');
+  });
+
+  it('should emit the done task', () => {
+    // given
+    const date = new Date();
+    taskService.setDone.and.returnValue(of(null));
+    const doneEmitter = spyOn(component.updated, 'emit');
+
+    // when
+    component.setDone({ id: 'id', name: 'My task', dueDate: date, done: false });
+
+    // then
+    expect(doneEmitter).toHaveBeenCalledWith({ id: 'id', name: 'My task', dueDate: date, done: false });
   });
 });

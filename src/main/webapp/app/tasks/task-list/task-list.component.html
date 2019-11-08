@@ -1,8 +1,16 @@
 <mat-list data-cy="task-list">
-  <mat-list-item *ngFor="let task of tasks" class="mat-elevation-z1">
+  <input [(ngModel)]="searchText" placeholder="Search.." class="search">
+  <mat-list-item *ngFor="let task of tasks | taskfilter: {name: searchText}">
     <mat-icon mat-list-icon>assignment</mat-icon>
     <h4 mat-line>{{task.name}}</h4>
     <p mat-line>ID: {{task.id}}</p>
+    <div>{{task.dueDate | date: 'MM/dd/yyyy'}}</div>
+    <div class="icon-container" *ngIf="task.done">
+      <mat-icon class="successNew">check_circle</mat-icon>
+    </div>
+    <button *ngIf="!task.done" mat-icon-button color="primary" (click)="setDone(task)">
+      <mat-icon>check_circle</mat-icon>
+    </button>
     <button mat-icon-button color="primary">
       <mat-icon aria-label="Delete task" (click)="delete(task)">delete</mat-icon>
     </button>

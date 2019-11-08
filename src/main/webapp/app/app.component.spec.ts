@@ -74,4 +74,17 @@ describe('AppComponent', () => {
     expect(component.tasks$).toEqual(tasks$);
     expect(taskService.getAll).toHaveBeenCalled();
   });
+
+  it('should reload the tasks after marking done', () => {
+    // given
+    const tasks = of([]);
+    taskService.getAll.and.returnValue(tasks);
+
+    // when
+    component.markTaskDone();
+
+    // then
+    expect(taskService.getAll).toHaveBeenCalled();
+    expect(component.tasks$).toEqual(tasks);
+  });
 });

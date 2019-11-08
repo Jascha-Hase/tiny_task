@@ -17,7 +17,7 @@ describe('LocalTaskService', () => {
 
     taskService = TestBed.get(LocalTaskService);
     spyOn(localStorage, 'getItem').and.callFake(() => `[${mockTask}]`);
-    spyOn(localStorage, 'setItem').and.callFake(() => {});
+    spyOn(localStorage, 'setItem').and.callFake(() => { });
   });
 
   it('should be created', () => {
@@ -38,7 +38,7 @@ describe('LocalTaskService', () => {
 
   it('should write task to local storage', () => {
     // when
-    taskService.create('Drinking the drink!');
+    taskService.create('Drinking the drink!', new Date);
 
     // then
     expect(localStorage.setItem).toHaveBeenCalled();

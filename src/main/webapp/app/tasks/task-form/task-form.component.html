@@ -1,5 +1,12 @@
-<form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="taskForm">
   <mat-form-field>
     <input type="text" formControlName="name" matInput placeholder="Add a new tiny task…" data-cy="task-input">
   </mat-form-field>
+  <mat-form-field>
+    <input matInput [min]="startDate" [matDatepicker]="picker" placeholder="Choose a due date" formControlName="dueDate" style="width: 80%">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker [startAt]="startDate"></mat-datepicker>
+  </mat-form-field>
+  <button (click)="addTaskButton()" mat-raised-button class="addButton">Add</button>
+  <button mat-raised-button class="removeButton" (click)="deleteDone()">Delete all</button>
 </form>
