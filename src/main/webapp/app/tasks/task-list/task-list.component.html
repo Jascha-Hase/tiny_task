@@ -1,10 +1,10 @@
 <mat-list data-cy="task-list">
   <input [(ngModel)]="searchText" placeholder="Search.." class="search">
-  <mat-list-item *ngFor="let task of tasks | taskfilter: {name: searchText}" class="mat-elevation-z1">
+  <mat-list-item *ngFor="let task of tasks | taskfilter: {name: searchText}">
     <mat-icon mat-list-icon>assignment</mat-icon>
     <h4 mat-line>{{task.name}}</h4>
     <p mat-line>ID: {{task.id}}</p>
-    <div>{{task.dueDate}}</div>
+    <div>{{task.dueDate | date: 'MM/dd/yyyy'}}</div>
     <div class="icon-container" *ngIf="task.done">
       <mat-icon class="successNew">check_circle</mat-icon>
     </div>

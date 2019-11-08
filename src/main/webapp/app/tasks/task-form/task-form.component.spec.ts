@@ -91,12 +91,12 @@ describe('TaskFormComponent', () => {
   it('should emit the deleted tasks', () => {
     // given
     taskService.deleteAllDoneTasks.and.returnValue(of(undefined));
-    const createEmitter = spyOn(component.deleted, 'emit');
+    const deleteEmitter = spyOn(component.deleted, 'emit');
     
     // when
     component.deleteDone();
 
     // then
-    expect(createEmitter).toHaveBeenCalled();
+    expect(deleteEmitter).toHaveBeenCalled();
   });
 });
